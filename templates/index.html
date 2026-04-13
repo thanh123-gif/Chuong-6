@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-gray-100">
+
+<div class="max-w-5xl mx-auto mt-10">
+
+    <h1 class="text-3xl font-bold text-center mb-6">
+        🔍 Mini Search Engine 
+    </h1>
+
+    <!-- SEARCH -->
+    <form method="POST" class="flex gap-2">
+        <input name="query" value="{{query}}"
+               class="flex-1 p-3 border rounded"
+               placeholder="Nhập từ bắt đầu bằng C...">
+        <button class="bg-blue-500 text-white px-4 rounded">
+            Search
+        </button>
+    </form>
+
+    <!-- RESULTS -->
+    <div class="mt-6 space-y-4">
+        {% for r in results %}
+        <div class="bg-white p-4 rounded shadow">
+
+            <h2 class="text-blue-600 font-bold">
+                {{r.doc}}
+            </h2>
+
+            <p class="text-sm text-gray-500">
+                Score: {{r.score}}
+            </p>
+
+            <!-- DETAIL SCORE -->
+            <div class="text-xs mt-2 bg-gray-100 p-2 rounded">
+                {% for d in r.detail %}
+                    {{d.word}} → tf={{d.tf}}, idf={{d.idf}}, score={{d.score}} <br>
+                {% endfor %}
+            </div>
+
+            <p class="mt-2">
+                {{r.content|safe}}
+            </p>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- INDEX VIEW -->
+    <div class="mt-10">
+        <h2 class="text-xl font-bold mb-2">📂 Inverted Index</h2>
+
+        <div class="bg-white p-4 rounded shadow text-sm">
+            {% for term, docs in index.items() %}
+                <div>
+                    <b>{{term}}</b> →
+                    {{docs}}
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+
+</div>
+
+</body>
+</html>
